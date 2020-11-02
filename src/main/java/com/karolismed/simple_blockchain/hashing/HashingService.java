@@ -1,4 +1,4 @@
-package com.karolismed.hashfunction.hashing;
+package com.karolismed.simple_blockchain.hashing;
 
 import java.nio.charset.StandardCharsets;
 

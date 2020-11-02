@@ -1,6 +1,6 @@
-package com.karolismed.hashfunction.hashing;
+package com.karolismed.simple_blockchain.hashing;
 
-import static com.karolismed.hashfunction.hashing.HashingService.FREE_BUCKET_SIZE;
+import static com.karolismed.simple_blockchain.hashing.HashingService.FREE_BUCKET_SIZE;
 
 class HashGenerator {
 

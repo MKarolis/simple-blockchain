@@ -1,6 +1,6 @@
-package com.karolismed.hashfunction.hashing;
+package com.karolismed.simple_blockchain.hashing;
 
-import static com.karolismed.hashfunction.hashing.HashingService.HASH_LENGTH;
+import static com.karolismed.simple_blockchain.hashing.HashingService.HASH_LENGTH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;

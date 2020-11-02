@@ -14,6 +14,8 @@ repositories {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
     compile "com.beust:jcommander:1.78"
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
     compile group: 'commons-codec', name: 'commons-codec', version: '1.15'
@@ -24,7 +26,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes "Main-Class": "com.karolismed.hashfunction.Main"
+        attributes "Main-Class": "com.karolismed.simple_blockchain.Main"
     }
 
     from {
@@ -33,7 +35,7 @@ jar {
 }
 
 launch4j {
-    mainClassName = 'com.karolismed.hashfunction.Main'
+    mainClassName = 'com.karolismed.simple_blockchain.Main'
     headerType = 'console'
     jreMinVersion = '11'
 }

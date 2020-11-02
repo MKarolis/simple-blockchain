@@ -1,4 +1,4 @@
-package com.karolismed.hashfunction.utils;
+package com.karolismed.simple_blockchain.utils;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -26,5 +26,9 @@ public class StringHelper {
         bytes[index]++;
 
         return new String(bytes);
+    }
+
+    public static void log(String message) {
+        System.out.println(message);
     }
 }
