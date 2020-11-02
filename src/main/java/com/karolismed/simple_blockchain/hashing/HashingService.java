@@ -1,5 +1,7 @@
 package com.karolismed.simple_blockchain.hashing;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.nio.charset.StandardCharsets;
 
 public class HashingService {
@@ -18,9 +20,11 @@ public class HashingService {
     };
 
     public String hash(String input) {
-        HashGenerator generator = new HashGenerator(HASH_SEED);
+        return hash(input.getBytes(StandardCharsets.UTF_8));
+    }
 
-        byte[] inputBytes =  input.getBytes(StandardCharsets.UTF_8);
+    public String hash(byte[] inputBytes) {
+        HashGenerator generator = new HashGenerator(HASH_SEED);
         int bucketCount = (int)Math.ceil(inputBytes.length / (double) FREE_BUCKET_SIZE);
 
         int bucketIndex = 0;
@@ -29,5 +33,11 @@ public class HashingService {
         } while (++bucketIndex < bucketCount);
 
         return generator.formatHash();
+    }
+
+    public String hash(byte[] inputBytes, byte ...otherBytes) {
+        return hash(
+            ArrayUtils.addAll(inputBytes, otherBytes)
+        );
     }
 }
