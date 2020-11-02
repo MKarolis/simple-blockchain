@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'edu.sc.seis.launch4j' version '2.4.8'
+}
+
+group 'org.karolismed'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile "com.beust:jcommander:1.78"
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+    compile group: 'commons-codec', name: 'commons-codec', version: '1.15'
+    compile group: 'commons-io', name: 'commons-io', version: '2.8.0'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile "org.assertj:assertj-core:3.11.1"
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.karolismed.hashfunction.Main"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+launch4j {
+    mainClassName = 'com.karolismed.hashfunction.Main'
+    headerType = 'console'
+    jreMinVersion = '11'
+}
