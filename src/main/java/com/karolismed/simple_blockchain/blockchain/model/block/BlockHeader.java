@@ -1,4 +1,4 @@
-package com.karolismed.simple_blockchain.blockchain.model;
+package com.karolismed.simple_blockchain.blockchain.model.block;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
