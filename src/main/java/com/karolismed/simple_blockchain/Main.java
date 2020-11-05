@@ -6,6 +6,12 @@ public class Main {
 
     public static void main(String[] args) {
         BlockChainRunner runner = new BlockChainRunner();
-        runner.init();
+        try {
+            runner.init();
+        } catch (Exception ex) {
+            System.out.println("Unhandled exception occurred: ");
+            ex.printStackTrace();
+        }
+
     }
 }

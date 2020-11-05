@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class TransactionInput implements Comparable<TransactionInput> {
     private String txId;
     private int index;
-    private String signedTxId;
+    private byte[] signedTxId;
 
     @Override
     public int compareTo(TransactionInput other) {

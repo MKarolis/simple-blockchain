@@ -1,15 +1,16 @@
 package com.karolismed.simple_blockchain.blockchain.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
+import static com.karolismed.simple_blockchain.utils.StringHelper.log;
 
 @ToString
 @EqualsAndHashCode
@@ -26,11 +27,15 @@ public class User {
         this.name = name;
     }
 
-    public byte[] sign(Signature signature, byte[] data)
-        throws InvalidKeyException, SignatureException
-    {
-        signature.initSign(privateKey);
-        signature.update(data);
-        return signature.sign();
+    public byte[] sign(Signature signature, byte[] data) {
+        try {
+            signature.initSign(privateKey);
+            signature.update(data);
+            return signature.sign();
+        } catch (InvalidKeyException | SignatureException ex) {
+            log("Digital signature error, " + ex.getMessage());
+            return null;
+        }
+
     }
 }

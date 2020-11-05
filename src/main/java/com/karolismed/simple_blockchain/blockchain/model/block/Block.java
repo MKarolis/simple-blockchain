@@ -1,16 +1,14 @@
 package com.karolismed.simple_blockchain.blockchain.model.block;
 
+import com.karolismed.simple_blockchain.blockchain.MerkleTreeConstructor;
 import com.karolismed.simple_blockchain.blockchain.model.transaction.Transaction;
 import com.karolismed.simple_blockchain.hashing.HashingService;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
-
 import java.util.List;
 
 import static com.karolismed.simple_blockchain.constants.GlobalConstants.BLOCKCHAIN_VERSION;
 
-@ToString
 @EqualsAndHashCode
 @Getter
 public class Block {
@@ -25,9 +23,10 @@ public class Block {
         int difficulty,
         List<Transaction> transactions
     ) {
+        MerkleTreeConstructor merkleTreeConstructor = new MerkleTreeConstructor();
         this.header = BlockHeader.builder()
             .difficulty(difficulty)
-            .merkleRootHash(transactions.toString()) // TODO, change
+            .merkleRootHash(merkleTreeConstructor.getMerkleTreeRoot(transactions)) // TODO, change
             .nonce(nonce)
             .prevBlockHash(prevBlockHash)
             .timestamp(timestamp)
@@ -38,17 +37,19 @@ public class Block {
         this.hash = computeHash();
     }
 
-    public Block(BlockHeader header, List<Transaction> transactions) {
-        this.header = header;
-        this.transactions = transactions;
-        this.hash = computeHash();
-    }
-
     public String computeHash() {
         HashingService hashingService = new HashingService();
 
         return hashingService.hash(
             header.toString()
+        );
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "{hash=%s, merkleRoot=%s transactionCount=%s, difficulty=%s, timestamp=%s, nonce=%s }",
+            hash, header.getMerkleRootHash(), transactions.size(), header.getDifficulty(), header.getTimestamp(), header.getNonce()
         );
     }
 }

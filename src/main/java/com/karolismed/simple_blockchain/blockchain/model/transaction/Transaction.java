@@ -1,24 +1,23 @@
 package com.karolismed.simple_blockchain.blockchain.model.transaction;
 
 import com.karolismed.simple_blockchain.hashing.HashingService;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lombok.Getter;
 
 @Getter
 public class Transaction {
     private String txId;
 
     public Transaction(List<TransactionInput> inputs, List<TransactionOutput> outputs) {
-        this.inputs = inputs;
-        this.outputs = outputs;
+        this.inputs = new ArrayList<>(inputs);
+        this.outputs = new ArrayList<>(outputs);
+
+        Collections.sort(outputs);
+        Collections.sort(inputs);
+
         updateTxId();
     }
 
@@ -29,8 +28,6 @@ public class Transaction {
         HashingService hashingService = new HashingService();
 
         StringBuilder builder = new StringBuilder();
-        Collections.sort(outputs);
-        Collections.sort(inputs);
         outputs.forEach(
             output -> builder.append(output.getValue()).append(output.getDestPublicKey().toString())
         );
@@ -42,5 +39,10 @@ public class Transaction {
         txId = hashingService.hash(
             builder.toString()
         );
+    }
+
+    @Override
+    public String toString() {
+        return txId;
     }
 }

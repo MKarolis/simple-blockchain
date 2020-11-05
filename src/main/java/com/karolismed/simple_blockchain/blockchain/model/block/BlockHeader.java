@@ -1,13 +1,9 @@
 package com.karolismed.simple_blockchain.blockchain.model.block;
 
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @Builder
 public class BlockHeader {
     private String prevBlockHash;
@@ -19,13 +15,11 @@ public class BlockHeader {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-            .append(difficulty)
-            .append(merkleRootHash)
-            .append(prevBlockHash)
-            .append(timestamp)
-            .append(version)
-            .append(nonce)
-            .toString();
+        return difficulty +
+            merkleRootHash +
+            prevBlockHash +
+            timestamp +
+            version +
+            nonce;
     }
 }
