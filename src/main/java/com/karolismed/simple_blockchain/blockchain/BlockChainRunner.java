@@ -203,65 +203,6 @@ public class BlockChainRunner {
         blockChain.add(block);
     }
 
-    private Block mineBlock(int difficulty, List<Transaction> transactions, String prevBlockHash) {
-        String expectedPrefix = "0".repeat(difficulty);
-        MerkleTreeConstructor merkleTreeConstructor = new MerkleTreeConstructor();
-
-        int nonce = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-        long timestamp = getCurrentTimestamp();
-
-        String baseStr = difficulty +
-            merkleTreeConstructor.getMerkleTreeRoot(transactions) +
-            prevBlockHash +
-            timestamp +
-            BLOCKCHAIN_VERSION;
-
-        String currentHash = hashingService.hash(baseStr + nonce);
-        int counter = 0;
-
-        while (!currentHash.substring(0, difficulty).equals(expectedPrefix)) {
-            nonce = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-            counter++;
-
-            if (counter >= 1000) {
-                timestamp = getCurrentTimestamp();
-                baseStr = difficulty +
-                    merkleTreeConstructor.getMerkleTreeRoot(transactions) +
-                    prevBlockHash +
-                    timestamp +
-                    BLOCKCHAIN_VERSION;
-                counter = 0;
-            }
-            currentHash = hashingService.hash(baseStr + nonce);
-        }
-
-        Block minedBlock = new Block(
-            prevBlockHash,
-            timestamp,
-            nonce,
-            difficulty,
-            transactions
-        );
-
-        transactions.forEach(transaction -> {
-            txIdBlockIndexMap.put(transaction.getTxId(), blockChain.size());
-            for (int i = 0; i < transaction.getOutputs().size(); i++) {
-                TransactionOutput output = transaction.getOutputs().get(i);
-                unspentOutputMap.put(
-                    output.getDestPublicKey(),
-                    UnspentOutput.builder()
-                        .destPublicKey(output.getDestPublicKey())
-                        .txId(transaction.getTxId())
-                        .outputIndex(i)
-                        .build()
-                );
-            }
-        });
-        transactionPool.removeAll(transactions);
-
-        return minedBlock;
-    }
-
     private long getCurrentTimestamp() {
         return new Timestamp(System.currentTimeMillis()).getTime();
     }
@@ -389,45 +330,6 @@ public class BlockChainRunner {
         }
 
         pendingTransactions = new ArrayList<>();
-    }
-
-    private List<Transaction> getRandomTransactionsForBlock()
-        throws NoSuchAlgorithmException, SignatureException, InvalidKeyException
-    {
-        Signature sign = Signature.getInstance("SHA256withDSA");
-        List<Transaction> transactions = new ArrayList<>();
-        List<Transaction> transactionsLeftInPool = new LinkedList<>(transactionPool);
-
-        if (transactionsLeftInPool.size() <= TRANSACTIONS_PER_BLOCK) {
-            return transactionsLeftInPool;
-        }
-
-        for (int i = 0; i < TRANSACTIONS_PER_BLOCK; i++) {
-            boolean isValid = true;
-            int randIndex = ThreadLocalRandom.current().nextInt(0, transactionsLeftInPool.size());
-            Transaction transactionToAdd = transactionsLeftInPool.remove(randIndex);
-
-            for (int x = 0; x < transactionToAdd.getInputs().size(); x++) {
-                TransactionInput input = transactionToAdd.getInputs().get(x);
-
-                Transaction inputTransaction = getTransactionFromBlockChainById(input.getTxId());
-                TransactionOutput sourceOutput = inputTransaction.getOutputs().get(input.getIndex());
-
-                sign.initVerify(sourceOutput.getDestPublicKey());
-                sign.update(inputTransaction.getTxId().getBytes());
-                isValid = sign.verify(input.getSignedTxId());
-                if (!isValid) {
-                    log("Invalid Transaction detected: " + transactionToAdd.getTxId());
-                    break;
-                }
-            }
-
-            if (isValid) {
-                transactions.add(transactionToAdd);
-            }
-        }
-
-        return transactions;
     }
 
     private int getUnspentOutputValue(UnspentOutput output) {

@@ -40,9 +40,9 @@ OR
 #### Summary
 When the application is launched `1000` users are auto-generated. Then a total of `10000` transactions
 are generated while simultaneously adding them to a block chain data structure. Each block holds up to `100`
-transactions.
+transactions. Each block is being mined in parallel by 11 miners.
 
-Difficulty of `4` is used for block mining `POW`, a custom hashing algorithm is used for hashing
+Difficulty of `5` is used for block mining `POW`, a custom hashing algorithm is used for hashing
  (more info [here](https://github.com/MKarolis/hash-function))
  
  The blockchain uses `UTXO` transaction model, similar model is used by `BitCoin`.
