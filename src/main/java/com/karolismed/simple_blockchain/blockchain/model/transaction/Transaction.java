@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 public class Transaction {
     private String txId;
+    private long creationTimeStamp;
 
     public Transaction(List<TransactionInput> inputs, List<TransactionOutput> outputs) {
         this.inputs = new ArrayList<>(inputs);
@@ -18,13 +19,14 @@ public class Transaction {
         Collections.sort(outputs);
         Collections.sort(inputs);
 
-        updateTxId();
+        creationTimeStamp = new Timestamp(System.currentTimeMillis()).getTime();
+        txId = computeTransactionId();
     }
 
     private List<TransactionInput> inputs;
     private List<TransactionOutput> outputs;
 
-    private void updateTxId() {
+    public String computeTransactionId() {
         HashingService hashingService = new HashingService();
 
         StringBuilder builder = new StringBuilder();
@@ -34,9 +36,9 @@ public class Transaction {
         inputs.forEach(
             input -> builder.append(input.getTxId()).append(input.getIndex()).append(input.getTxId())
         );
-        builder.append(new Timestamp(System.currentTimeMillis()).getTime());
+        builder.append(creationTimeStamp);
 
-        txId = hashingService.hash(
+        return hashingService.hash(
             builder.toString()
         );
     }
