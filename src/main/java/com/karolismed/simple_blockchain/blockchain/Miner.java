@@ -6,7 +6,6 @@ import com.karolismed.simple_blockchain.hashing.HashingService;
 import lombok.Getter;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
@@ -35,13 +34,13 @@ public class Miner implements Runnable {
     @Getter
     private final int index;
 
+    private int tempHashCounter;
     private volatile String prevBlockHash;
     private volatile String expectedPrefix;
     private volatile int difficulty;
     private volatile List<Transaction> pickedTransactions;
 
     private volatile long tempTimestamp;
-    private volatile int tempHashCounter;
     private volatile String tempBaseStr;
 
 
@@ -77,7 +76,7 @@ public class Miner implements Runnable {
 
             int nonce = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
 
-            if (isNull(tempBaseStr) || tempHashCounter > 1000) {
+            if (isNull(tempBaseStr) || tempHashCounter > 100000) {
                 tempTimestamp = getCurrentTimestamp();
                 tempBaseStr = difficulty +
                     merkleTreeConstructor.getMerkleTreeRoot(pickedTransactions) +
@@ -90,6 +89,7 @@ public class Miner implements Runnable {
             if (hashingService.hash(tempBaseStr + nonce).substring(0, difficulty).equals(expectedPrefix)) {
                 handleBlockMinedSuccessfully(nonce);
             }
+            tempHashCounter++;
         }
 
         log(name + " is shutting down");
