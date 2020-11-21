@@ -6,7 +6,6 @@ import com.karolismed.simple_blockchain.blockchain.model.transaction.Transaction
 import com.karolismed.simple_blockchain.blockchain.model.transaction.TransactionInput;
 import com.karolismed.simple_blockchain.blockchain.model.transaction.TransactionOutput;
 import com.karolismed.simple_blockchain.blockchain.model.transaction.UnspentOutput;
-import com.karolismed.simple_blockchain.hashing.HashingService;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -29,18 +28,15 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import org.apache.commons.lang3.tuple.Pair;
 
-import static com.karolismed.simple_blockchain.constants.GlobalConstants.BLOCKCHAIN_VERSION;
 import static com.karolismed.simple_blockchain.constants.GlobalConstants.BLOCK_ZERO_HASH;
 import static com.karolismed.simple_blockchain.constants.GlobalConstants.GENESIS_BLOCK_DIFFICULTY;
 import static com.karolismed.simple_blockchain.constants.GlobalConstants.REGULAR_BLOCK_DIFFICULTY;
-import static com.karolismed.simple_blockchain.constants.GlobalConstants.TRANSACTIONS_PER_BLOCK;
 import static com.karolismed.simple_blockchain.constants.GlobalConstants.TRANSACTION_POOL_SIZE;
 import static com.karolismed.simple_blockchain.utils.StringHelper.log;
 import static java.util.Objects.isNull;
 
 public class BlockChainRunner {
 
-    private final HashingService hashingService;
     private final BlockChainSetupService setupService;
     private final MerkleTreeConstructor merkleTreeConstructor;
 
@@ -55,7 +51,6 @@ public class BlockChainRunner {
     private int totalTransactionsPooled;
 
     public BlockChainRunner() {
-        hashingService = new HashingService();
         setupService = new BlockChainSetupService();
         merkleTreeConstructor = new MerkleTreeConstructor();
 

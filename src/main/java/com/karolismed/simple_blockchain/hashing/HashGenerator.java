@@ -26,7 +26,7 @@ class HashGenerator {
     public String formatHash() {
         StringBuilder stringBuilder = new StringBuilder();
         for (int word : hashWords) {
-            stringBuilder.append(String.format("%08X", word));
+            stringBuilder.append(String.format("%08x", word));
         }
         return stringBuilder.toString();
     }

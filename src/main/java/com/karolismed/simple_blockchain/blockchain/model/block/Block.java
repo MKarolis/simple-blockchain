@@ -26,7 +26,7 @@ public class Block {
         MerkleTreeConstructor merkleTreeConstructor = new MerkleTreeConstructor();
         this.header = BlockHeader.builder()
             .difficulty(difficulty)
-            .merkleRootHash(merkleTreeConstructor.getMerkleTreeRoot(transactions)) // TODO, change
+            .merkleRootHash(merkleTreeConstructor.getMerkleTreeRoot(transactions))
             .nonce(nonce)
             .prevBlockHash(prevBlockHash)
             .timestamp(timestamp)
